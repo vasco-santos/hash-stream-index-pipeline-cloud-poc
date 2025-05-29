@@ -1,0 +1,24 @@
+{
+  "name": "hash-stream-index-pipeline-cloud-poc",
+  "type": "module",
+  "scripts": {
+    "build": "esbuild --bundle --outfile=./dist/index.js --platform=node --target=node20 ./src/index.ts",
+    "deploy": "run-s build zip update",
+    "update": "aws lambda update-function-code --zip-file fileb://lambda.zip --function-name hello",
+    "zip": "zip -j lambda.zip dist/index.js"
+  },
+  "devDependencies": {
+    "@types/aws-lambda": "8.10.149",
+    "esbuild": "^0.21.4",
+    "npm-run-all2": "^6.2.0"
+  },
+  "dependencies": {
+    "@aws-sdk/client-s3": "^3.817.0",
+    "@aws-sdk/client-sqs": "^3.817.0",
+    "@hash-stream/index": "^1.4.1",
+    "@hash-stream/index-pipeline": "^1.0.2",
+    "hono": "^4.7.10",
+    "multiformats": "13.3.6",
+    "sst": "3.16.3"
+  }
+}
