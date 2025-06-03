@@ -10,13 +10,17 @@
   "devDependencies": {
     "@types/aws-lambda": "8.10.149",
     "esbuild": "^0.21.4",
-    "npm-run-all2": "^6.2.0"
+    "npm-run-all2": "^6.2.0",
+    "typescript": "^5.8.2"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.817.0",
     "@aws-sdk/client-sqs": "^3.817.0",
-    "@hash-stream/index": "^1.4.1",
-    "@hash-stream/index-pipeline": "^1.0.2",
+    "@hash-stream/index": "^1.4.2",
+    "@hash-stream/index-pipeline": "^1.2.0",
+    "@hash-stream/pack": "^1.6.0",
+    "@hash-stream/streamer": "^1.4.0",
+    "@hash-stream/utils": "^2.2.1",
     "hono": "^4.7.10",
     "multiformats": "13.3.6",
     "sst": "3.16.3"

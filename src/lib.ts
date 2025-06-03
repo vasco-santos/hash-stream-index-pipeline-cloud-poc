@@ -5,6 +5,9 @@ import { SQSClient } from '@aws-sdk/client-sqs'
 // FileStore
 import { S3LikeFileStore } from '@hash-stream/index-pipeline/file-store/s3-like'
 
+// PackStore
+import { S3LikePackStore } from '@hash-stream/pack/store/s3-like'
+
 // Index
 import { S3LikeIndexStore } from '@hash-stream/index/store/s3-like'
 import { MultipleLevelIndexWriter } from '@hash-stream/index'
@@ -45,6 +48,13 @@ export function getIndexSchedulerConsumerContext() {
     client
   })
 
+  const packStore = new S3LikePackStore({
+    bucketName: Resource.PackStoreBucket.name as string,
+    prefix: '', // Use empty prefix to access the root of the bucket
+    extension: '', // Use empty extension to access files without a specific extension as the location already includes this
+    client
+  })
+
   const indexStore = new S3LikeIndexStore({
     bucketName: Resource.IndexStoreBucket.name as string,
     prefix: '', // Use empty prefix to access the root of the bucket
@@ -55,6 +65,7 @@ export function getIndexSchedulerConsumerContext() {
 
   return {
     fileStore,
+    packStore,
     indexWriters: [indexWriter],
   }
 }

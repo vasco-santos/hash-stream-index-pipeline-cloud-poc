@@ -10,8 +10,10 @@ export default $config({
     };
   },
   async run() {
-    // Create the file store bucket and index store bucket
+    // Create the file store bucket, pack store bucket and index store bucket
+    // Buckets can be wired with the pipeline via their ARN as well.
     const fileStoreBucket = new sst.aws.Bucket("FileStoreBucket");
+    const packStoreBucket = new sst.aws.Bucket("PackStoreBucket");
     const indexStoreBucket = new sst.aws.Bucket("IndexStoreBucket");
 
     // create dead letter queue
@@ -28,6 +30,7 @@ export default $config({
       handler: "src/index-scheduler-subscriber.handler",
       link: [
         fileStoreBucket,
+        packStoreBucket,
         indexStoreBucket,
         indexSchedulerQueue
       ]
@@ -42,15 +45,19 @@ export default $config({
     // This is the entry point for the pipeline and where a HTTP Request triggers
     // the execution of the pipeline. This is made for example purposes only and
     // should not be used in production. In production, you would use a long running
-    // process to go over the files in the file store and schedule them for indexing.
+    // process to go over the files in the file store and schedule them for indexing,
+    // rather than a lambda function that is triggered by an HTTP request, which is
+    // limited by a 15 minutes runtime.
     // Either you could use a SST Task, which uses Amazon ECS on AWS Fargate, or run
     // this as a long running process on an EC2 instance or locally.
     // https://sst.dev/docs/component/aws/task/
     new sst.aws.Function("Hono", {
       url: true,
       handler: "src/index.handler",
+      timeout: "15 minutes",
       link: [
         fileStoreBucket,
+        packStoreBucket,
         indexStoreBucket,
         indexSchedulerQueue
       ]

@@ -5,32 +5,6 @@
 
 declare module "sst" {
   export interface Resource {
-    "FileStoreBucket": {
-      "name": string
-      "type": "sst.aws.Bucket"
-    }
-    "Hono": {
-      "name": string
-      "type": "sst.aws.Function"
-      "url": string
-    }
-    "IndexSchedulerDlq": {
-      "type": "sst.aws.Queue"
-      "url": string
-    }
-    "IndexSchedulerQueue": {
-      "type": "sst.aws.Queue"
-      "url": string
-    }
-    "IndexSchedulerSubscriberFunction": {
-      "name": string
-      "type": "sst.aws.Function"
-      "url": string
-    }
-    "IndexStoreBucket": {
-      "name": string
-      "type": "sst.aws.Bucket"
-    }
   }
 }
 /// <reference path="sst-env.d.ts" />
