@@ -12,6 +12,24 @@ This PoC relies on [SST](https://sst.dev) to deploy cloud infrastructure. [SST](
 2. Install repository dependencies (`npm install`)
 3. Run development server (`npx sst dev`)
 
+## 🧩 Index Pipeline Architecture
+
+The following architecture outlines a pipeline to generate indexes from files stored in a file store. The pipeline lists raw files, schedules them for indexing, and a file processer generates detached indexes that map content to byte ranges.
+
+> Note: When using UnixFS, a root block must be created and stored separately. This enables clients to reconstruct the UnixFS DAG when requesting the root CID, while still allowing retrieval by individual leaf CIDs.
+
+![Index Pipeline Architecture](./diagrams/hash-stream-unixfs-index-pipeline.svg)
+
+### ☁️ Hash Stream Server Architecture after running pipeline
+
+When working with detached indexes (specially UnixFS) and raw files, the Hash Stream server needs access to both the file storage and the stored root blocks.
+
+The "default" implementation of the HashStream Server uses a `PackReader`, which only has access to the Pack Store. In this case the HashStream server not only needs to access the PackStore where the UnixFS Root blocks get stored, but also the FileStore where the raw files are stored. Therefore, a `UnixFsPackReader` building block is also provided to facilitate this.
+
+The following diagram illustrates a potential architecture for a Hash Stream Server. It reads paths from the indexes via the `FileStore` and multihashes for the UnixFS Root Block via the `PackStore`. This enables an ingestion pipeline to be Content Addressable and directly to the PackStore underlying storage if desired.
+
+![Hash Stream server architecture](./diagrams/hash-stream-unixfs-reader.svg)
+
 ## From PoC to Production insights
 
 ### Object Storage
